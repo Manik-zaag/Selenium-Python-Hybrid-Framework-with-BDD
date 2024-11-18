@@ -29,7 +29,7 @@ Feature: Register Account functionality
     And I click on continue button
     Then Proper warning message information about duplicate account should be displayed
 
- Scenario: Register without providing any details
+  Scenario: Register without providing any details
     When I don't enter anything into the fields
     And I click on continue button
     Then Proper warning message for every mandatory fields should be displayed

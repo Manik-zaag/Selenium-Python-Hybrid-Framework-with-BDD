@@ -14,6 +14,7 @@ Feature: Search functionality
     Then Proper message should be displayed in Search results
 
 
+  @smoke
   Scenario: Search without entering any product
     When I don't enter anything into Search box field
     And I click on Search button

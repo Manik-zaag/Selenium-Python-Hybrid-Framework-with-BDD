@@ -51,7 +51,7 @@ def before_scenario(context, driver):
     # context.driver.maximize_window()
     base_url = ConfigReader.read_configuration("basic info", "url")
     context.driver.get(base_url)
-    # driver.implicitly_wait(5)
+    # driver.implicitly_wait(7)
 
 
 def after_scenario(context, driver):

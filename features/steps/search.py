@@ -2,6 +2,12 @@ from behave import *
 
 from pages.HomePage import HomePage
 
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
+
 
 @given('I got navigated to Home page')
 def step_impl(context):
@@ -31,6 +37,8 @@ def step_impl(context):
 @when('I don\'t enter anything into Search box field')
 def step_impl(context):
     context.home_page.enter_product_into_search_box_field("")
+    logger.info("Hello Manik")
+    print("Hello Kinam", flush=True)
 
 
 @then(u'Valid product should get displayed in Search results')
