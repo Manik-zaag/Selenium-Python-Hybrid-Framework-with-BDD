@@ -7,6 +7,7 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
+from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 
 from utilities import ConfigReader
 
@@ -20,6 +21,12 @@ def before_scenario(context, driver):
 
     if browser.lower().__eq__("chrome"):
         chrome_options = ChromeOptions()
+        # Disable automation info bar by setting preferences
+        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        chrome_options.add_experimental_option("useAutomationExtension", False)
+        chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+        # Disable Web Push Notification
+        chrome_options.add_argument("--disable-notifications")  # Disable notifications
         if headless:
             chrome_options.add_argument("--headless")
         if maximized:
@@ -29,6 +36,7 @@ def before_scenario(context, driver):
         context.driver = webdriver.Chrome(service=ChromeService(), options=chrome_options)
     elif browser.lower().__eq__("firefox"):
         firefox_options = FirefoxOptions()
+        firefox_options.set_preference("dom.push.enabled", False) # Disable web push notification
         if headless:
             firefox_options.add_argument("--headless")
         if maximized:
@@ -38,6 +46,12 @@ def before_scenario(context, driver):
             context.driver.fullscreen_window()  # Use Selenium method to enter full-screen mode
     elif browser.lower().__eq__("edge"):
         edge_options = EdgeOptions()
+        # Disable automation info bar by setting preferences
+        edge_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        edge_options.add_experimental_option("useAutomationExtension", False)
+        edge_options.add_argument('--disable-blink-features=AutomationControlled')
+        # Disable web push notification
+        edge_options.add_argument("--disable-notifications")  # Disable notifications
         if headless:
             edge_options.add_argument("--headless")
         if maximized:

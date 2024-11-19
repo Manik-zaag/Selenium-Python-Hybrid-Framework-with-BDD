@@ -1,3 +1,5 @@
+import time
+
 from behave import *
 
 from pages.HomePage import HomePage
@@ -38,7 +40,7 @@ def step_impl(context):
 def step_impl(context):
     context.home_page.enter_product_into_search_box_field("")
     logger.info("Hello Manik")
-    print("Hello Kinam", flush=True)
+    print("Hello Kinam")
 
 
 @then(u'Valid product should get displayed in Search results')

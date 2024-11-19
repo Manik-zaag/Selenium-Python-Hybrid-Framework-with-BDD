@@ -17,6 +17,7 @@ class BasePage:
         Returns a web element identified by the locator.
         """
         return self.driver.find_element(*locator)
+        # return self.wait_for_element_presence(locator)
 
     def get_elements(self, locator):
         """
@@ -49,41 +50,6 @@ class BasePage:
         Returns the text of the element identified by the locator.
         """
         return self.get_element(locator).text
-
-    def wait_for_element_visibility(self, locator, timeout=10):
-        """
-        Waits for the element identified by the locator to be visible.
-        """
-        try:
-            element = WebDriverWait(self.driver, timeout).until(
-                EC.visibility_of_element_located(locator)
-            )
-            return element
-        except TimeoutException:
-            raise NoSuchElementException(f"Element {locator} not visible after {timeout} seconds.")
-
-    def wait_for_element_clickable(self, locator, timeout=10):
-        """
-        Waits for the element identified by the locator to be clickable.
-        """
-        try:
-            element = WebDriverWait(self.driver, timeout).until(
-                EC.element_to_be_clickable(locator)
-            )
-            return element
-        except TimeoutException:
-            raise NoSuchElementException(f"Element {locator} not clickable after {timeout} seconds.")
-
-    def wait_for_text_in_element(self, locator, text, timeout=10):
-        """
-        Waits for the element identified by the locator to contain the specified text.
-        """
-        try:
-            WebDriverWait(self.driver, timeout).until(
-                EC.text_to_be_present_in_element(locator, text)
-            )
-        except TimeoutException:
-            raise TimeoutException(f"Text '{text}' not present in element {locator} after {timeout} seconds.")
 
     def is_element_displayed(self, locator):
         """
@@ -217,13 +183,13 @@ class BasePage:
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[-1])
 
-    def accept_alert(self):
+    def alert_accept(self):
         """
         Accepts (clicks OK) on an alert pop-up.
         """
         self.driver.switch_to.alert.accept()
 
-    def dismiss_alert(self):
+    def alert_dismiss(self):
         """
         Dismisses (clicks Cancel) on an alert pop-up.
         """
@@ -363,6 +329,29 @@ class BasePage:
         """
         self.driver.quit()
 
+    def wait_for_element_visibility(self, locator, timeout=10):
+        """
+        Waits for the element identified by the locator to be visible.
+        """
+        try:
+            element = WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located(locator)
+            )
+            return element
+        except TimeoutException:
+            raise NoSuchElementException(f"Element {locator} not visible after {timeout} seconds.")
+
+    def wait_for_element_invisibility(self, locator, timeout=10):
+        """
+        Waits for the element identified by the locator to be invisible (not displayed or not present).
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.invisibility_of_element_located(locator)
+            )
+        except TimeoutException:
+            raise TimeoutException(f"Element {locator} still visible after {timeout} seconds.")
+
     def wait_until_element_disappears(self, locator, timeout=10):
         """
         Waits until the element identified by the locator disappears from the DOM.
@@ -374,12 +363,129 @@ class BasePage:
         except TimeoutException:
             print("Search results not found within timeout period.")
 
-    '''
+    def wait_for_element_presence(self, locator, timeout=10):
+        """
+        Waits for the element identified by the locator to be present in the DOM.
+        """
         try:
-                WebDriverWait(self.driver, 10).until(
-                    EC.visibility_of_element_located((By.XPATH, "//div[@class='search-results']"))
-                )
-            except TimeoutException:
-                print("Search results not found within timeout period.")
-    
-    '''
+            element = WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located(locator)
+            )
+            return element
+        except TimeoutException:
+            raise NoSuchElementException(f"Element {locator} not present in DOM after {timeout} seconds.")
+
+    def wait_for_element_to_be_selected(self, locator, timeout=10):
+        """
+        Waits for the element identified by the locator to be selected (like a checkbox being checked).
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.element_to_be_selected(locator)
+            )
+        except TimeoutException:
+            raise TimeoutException(f"Element {locator} not selected after {timeout} seconds.")
+
+    def wait_for_element_clickable(self, locator, timeout=10):
+        """
+        Waits for the element identified by the locator to be clickable.
+        """
+        try:
+            element = WebDriverWait(self.driver, timeout).until(
+                EC.element_to_be_clickable(locator)
+            )
+            return element
+        except TimeoutException:
+            raise NoSuchElementException(f"Element {locator} not clickable after {timeout} seconds.")
+
+    def wait_for_alert(self, timeout=10):
+        """
+        Waits for an alert to be present on the page.
+        """
+        try:
+            alert = WebDriverWait(self.driver, timeout).until(
+                EC.alert_is_present()
+            )
+            return alert
+        except TimeoutException:
+            raise TimeoutException(f"No alert present after {timeout} seconds.")
+
+    def wait_for_alert_to_disappear(self, timeout=10):
+        """
+        Waits for the alert to disappear from the page (if it was present).
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'alert')]"))
+            )
+        except TimeoutException:
+            raise TimeoutException(f"Alert did not disappear after {timeout} seconds.")
+
+    def wait_for_element_to_be_enabled(self, locator, timeout=10):
+        """
+        Waits for the element to be enabled (e.g., a button or input field).
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.element_to_be_enabled(locator)
+            )
+        except TimeoutException:
+            raise TimeoutException(f"Element {locator} not enabled after {timeout} seconds.")
+
+    def wait_for_element_to_have_text(self, locator, text, timeout=10):
+        """
+        Waits for the element identified by the locator to contain the specified text.
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.text_to_be_present_in_element(locator, text)
+            )
+        except TimeoutException:
+            raise TimeoutException(f"Text '{text}' not present in element {locator} after {timeout} seconds.")
+
+    def wait_for_element_to_have_value(self, locator, value, timeout=10):
+        """
+        Waits for an element (e.g., input field) to have a specific value.
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.text_to_be_present_in_element_value(locator, value)
+            )
+        except TimeoutException:
+            raise TimeoutException(f"Element {locator} does not have the value '{value}' after {timeout} seconds.")
+
+    def wait_for_element_to_have_attribute(self, locator, attribute, value, timeout=10):
+        """
+        Waits for an element to have a specific attribute with a specific value.
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.attribute_to_be(locator, attribute, value)
+            )
+        except TimeoutException:
+            raise TimeoutException(
+                f"Element {locator} does not have attribute '{attribute}' with value '{value}' after {timeout} seconds.")
+
+    def wait_for_frame_to_be_available_and_switch_to_it(self, locator, timeout=10):
+        """
+        Waits for the frame to be available and switches to it.
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.frame_to_be_available_and_switch_to_it(locator)
+            )
+        except TimeoutException:
+            raise TimeoutException(f"Frame {locator} not available for switching after {timeout} seconds.")
+
+    def wait_for_window_to_be_available_and_switch(self, timeout=10):
+        """
+        Waits for a new browser window or tab to be available and switches to it.
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.new_window_is_opened(self.driver.window_handles)
+            )
+            self.driver.switch_to.window(self.driver.window_handles[-1])
+        except TimeoutException:
+            raise TimeoutException(f"No new window or tab opened after {timeout} seconds.")
+
