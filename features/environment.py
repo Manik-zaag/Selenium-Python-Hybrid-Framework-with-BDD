@@ -1,4 +1,4 @@
-import argparse
+import os
 
 import allure
 from allure_commons.types import AttachmentType
@@ -14,18 +14,8 @@ from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from utilities import ConfigReader
 
 
-def parse_args():
-    """
-    Pass command-line options through jenkins
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--browser', type=str, required=True, help="Specify the browser to use (chrome, firefox, edge)")
-    return parser.parse_args()
-
-
 def before_scenario(context, driver):
-    args = parse_args()
-    browser = args.browser
+    browser = os.getenv('browser', 'chrome')
 
     # browser = ConfigReader.read_configuration("basic info", "browser")
     headless = ConfigReader.read_configuration("basic info", "headless") == "true"
