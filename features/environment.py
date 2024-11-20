@@ -14,13 +14,36 @@ from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from utilities import ConfigReader
 
 
-def before_scenario(context, driver):
-    browser = os.getenv('browser', 'chrome')
+def get_config_value(section, key, env_var=None, default=None):
+    """Helper function to get a config value from environment or configuration file."""
+    # First, check if the environment variable exists
+    value = os.getenv(env_var, default) if env_var else default
 
+    # If the environment variable isn't set, check the configuration file
+    if value is None:
+        value = ConfigReader.read_configuration(section, key)
+
+    return value
+
+
+def before_scenario(context, driver):
+    # Retrieve browser settings from environment or configuration file
+    browser = get_config_value("basic info", "browser", "browser")
+    headless = get_config_value("basic info", "headless", "headless", "false") == "true"
+    maximized = get_config_value("basic info", "maximized", "maximized", "false") == "true"
+    fullscreen = get_config_value("basic info", "fullscreen", "fullscreen", "false") == "true"
+    # # get browser value from Jenkins
+    # browser = os.getenv('browser', 'chrome')
+    # browser = os.getenv("basic info", "browser")
+    # headless = os.getenv("basic info", "headless") == "true"
+    # maximized = os.getenv("basic info", "maximized") == "true"  # Read maximized setting
+    # fullscreen = os.getenv("basic info", "fullscreen") == "true"
+    #
+    # # get browser value from config.ini file
     # browser = ConfigReader.read_configuration("basic info", "browser")
-    headless = ConfigReader.read_configuration("basic info", "headless") == "true"
-    maximized = ConfigReader.read_configuration("basic info", "maximized") == "true"  # Read maximized setting
-    fullscreen = ConfigReader.read_configuration("basic info", "fullscreen") == "true"
+    # headless = ConfigReader.read_configuration("basic info", "headless") == "true"
+    # maximized = ConfigReader.read_configuration("basic info", "maximized") == "true"  # Read maximized setting
+    # fullscreen = ConfigReader.read_configuration("basic info", "fullscreen") == "true"
 
     if browser.lower().__eq__("chrome"):
         chrome_options = ChromeOptions()
