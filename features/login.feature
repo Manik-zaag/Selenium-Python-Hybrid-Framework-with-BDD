@@ -2,7 +2,7 @@ Feature: Login Functionality
 
   Background:
     Given I navigated to Login page
-
+    
   Scenario Outline: Login with valid credentials
     When I enter valid email address as "<email>" and valid password as "<password>" into the fields
     And I click on Login button

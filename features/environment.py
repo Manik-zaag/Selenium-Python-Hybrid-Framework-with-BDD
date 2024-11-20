@@ -1,3 +1,5 @@
+import argparse
+
 import allure
 from allure_commons.types import AttachmentType
 from selenium import webdriver
@@ -12,9 +14,20 @@ from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from utilities import ConfigReader
 
 
-def before_scenario(context, driver):
+def parse_args():
+    """
+    Pass command-line options through jenkins
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--browser', type=str, required=True, help="Specify the browser to use (chrome, firefox, edge)")
+    return parser.parse_args()
 
-    browser = ConfigReader.read_configuration("basic info", "browser")
+
+def before_scenario(context, driver):
+    args = parse_args()
+    browser = args.browser
+
+    # browser = ConfigReader.read_configuration("basic info", "browser")
     headless = ConfigReader.read_configuration("basic info", "headless") == "true"
     maximized = ConfigReader.read_configuration("basic info", "maximized") == "true"  # Read maximized setting
     fullscreen = ConfigReader.read_configuration("basic info", "fullscreen") == "true"
