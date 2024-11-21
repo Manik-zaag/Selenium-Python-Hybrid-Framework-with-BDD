@@ -32,18 +32,7 @@ def before_scenario(context, driver):
     headless = get_config_value("basic info", "headless", "headless", "false") == "true"
     maximized = get_config_value("basic info", "maximized", "maximized", "false") == "true"
     fullscreen = get_config_value("basic info", "fullscreen", "fullscreen", "false") == "true"
-    # # get browser value from Jenkins
-    # browser = os.getenv('browser', 'chrome')
-    # browser = os.getenv("basic info", "browser")
-    # headless = os.getenv("basic info", "headless") == "true"
-    # maximized = os.getenv("basic info", "maximized") == "true"  # Read maximized setting
-    # fullscreen = os.getenv("basic info", "fullscreen") == "true"
-    #
-    # # get browser value from config.ini file
-    # browser = ConfigReader.read_configuration("basic info", "browser")
-    # headless = ConfigReader.read_configuration("basic info", "headless") == "true"
-    # maximized = ConfigReader.read_configuration("basic info", "maximized") == "true"  # Read maximized setting
-    # fullscreen = ConfigReader.read_configuration("basic info", "fullscreen") == "true"
+    base_url = get_config_value("basic info", "url", "url")
 
     if browser.lower().__eq__("chrome"):
         chrome_options = ChromeOptions()
@@ -89,7 +78,6 @@ def before_scenario(context, driver):
         print("Provide a valid browser name from this list chrom/firefox/edge")
 
     # context.driver.maximize_window()
-    base_url = ConfigReader.read_configuration("basic info", "url")
     context.driver.get(base_url)
     # driver.implicitly_wait(7)
 
