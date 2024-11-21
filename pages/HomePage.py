@@ -16,6 +16,9 @@ class HomePage(BasePage):
         self.login_option_link_text = (By.LINK_TEXT, "Login")
         self.register_option_link_text = (By.LINK_TEXT, "Register")
 
+    def retrieve_page_title(self):
+        return self.get_page_title()
+
     def enter_product_into_search_box_field(self, product_name):
         self.send_keys_to_element(self.search_box_field_name, product_name)
 

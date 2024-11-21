@@ -14,6 +14,8 @@ logger = logging.getLogger()
 @given('I got navigated to Home page')
 def step_impl(context):
     context.home_page = HomePage(context.driver)
+    expected_page_title = "Your Storer"
+    assert context.home_page.retrieve_page_title().__eq__(expected_page_title)
 
 
 @when(u'I enter valid product as "{product}" into the Search box field')
