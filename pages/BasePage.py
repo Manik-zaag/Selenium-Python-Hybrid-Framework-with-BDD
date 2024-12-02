@@ -12,6 +12,9 @@ class BasePage:
     def __init__(self, driver):
         self.driver = driver
 
+    def navigate_to_base_url(self, url):
+        self.driver.get(url)
+
     def get_element(self, locator):
         """
         Returns a web element identified by the locator.

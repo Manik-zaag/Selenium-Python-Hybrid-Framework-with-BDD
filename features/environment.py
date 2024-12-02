@@ -103,6 +103,9 @@ def before_scenario(context, driver):
     fullscreen = get_config_value("basic info", "fullscreen", "fullscreen") == "true"
     base_url = get_config_value("basic info", "url", "url")
 
+    # Set base_url in context
+    context.base_url = base_url
+
     # Setup browser options
     options = setup_browser_options(browser, headless, maximized, fullscreen)
 
@@ -111,7 +114,7 @@ def before_scenario(context, driver):
     context.driver = initialize_webdriver(browser, options)
 
     # Open the base URL
-    context.driver.get(base_url)
+    # context.driver.get(base_url)
 
 
 def after_scenario(context, driver):

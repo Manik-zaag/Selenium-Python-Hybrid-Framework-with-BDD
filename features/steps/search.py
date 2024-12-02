@@ -14,6 +14,7 @@ logger = logging.getLogger()
 @given('I got navigated to Home page')
 def step_impl(context):
     context.home_page = HomePage(context.driver)
+    context.home_page.navigate_to_base_page(context)
     expected_page_title = "Your Store"
     assert context.home_page.retrieve_page_title().__eq__(expected_page_title)
 

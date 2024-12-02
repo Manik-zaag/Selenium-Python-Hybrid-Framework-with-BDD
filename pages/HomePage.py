@@ -16,6 +16,9 @@ class HomePage(BasePage):
         self.login_option_link_text = (By.LINK_TEXT, "Login")
         self.register_option_link_text = (By.LINK_TEXT, "Register")
 
+    def navigate_to_base_page(self, context):
+        self.navigate_to_base_url(context.base_url)
+
     def retrieve_page_title(self):
         return self.get_page_title()
 
