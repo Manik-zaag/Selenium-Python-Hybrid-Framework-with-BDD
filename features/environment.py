@@ -17,13 +17,13 @@ def get_config_value(section, key, env_var=None, default=None):
     # First, check if the environment variable exists
     if env_var:
         value = os.getenv(env_var, default)
-        if value is not None and False:
+        if value is not None:
             print(f"Found value from environment variable: {value}")
             return value  # Return the environment variable value if it exists
 
     # If the environment variable isn't set or not provided, check the configuration file
     value = ConfigReader.read_configuration(section, key)
-    if value is not None and False:
+    if value is not None:
         print(f"Read value from config file: {value}")
     else:
         print(f"Using default value: {default}")
@@ -98,9 +98,9 @@ def before_scenario(context, driver):
     """Setup the WebDriver before running the scenario."""
     # Retrieve browser settings from environment or configuration file
     browser = get_config_value("basic info", "browser", "browser", "edge")
-    headless = get_config_value("basic info", "headless", "headless", "false") == "true"
-    maximized = get_config_value("basic info", "maximized", "maximized", "false") == "true"
-    fullscreen = get_config_value("basic info", "fullscreen", "fullscreen", "false") == "true"
+    headless = get_config_value("basic info", "headless", "headless") == "true"
+    maximized = get_config_value("basic info", "maximized", "maximized") == "true"
+    fullscreen = get_config_value("basic info", "fullscreen", "fullscreen") == "true"
     base_url = get_config_value("basic info", "url", "url")
 
     # Setup browser options
