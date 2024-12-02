@@ -23,6 +23,10 @@ def get_config_value(section, key, env_var=None, default=None):
 
     # If the environment variable isn't set or not provided, check the configuration file
     value = ConfigReader.read_configuration(section, key)
+    if value is not None:
+        print(f"Read value from config file: {value}")
+    else:
+        print(f"Using default value: {default}")
     return value if value is not None else default  # Return from config file or default if not found
 
 
