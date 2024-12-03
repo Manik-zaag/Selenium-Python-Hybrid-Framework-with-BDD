@@ -12,7 +12,7 @@ class HomePage(BasePage):
         super().__init__(driver)
         self.search_box_field_name = (By.NAME, "search")
         self.search_button_xpath = (By.XPATH, "//button[@class='btn btn-default btn-lg']")
-        self.my_account_drop_menu_xpath = (By.XPATH, "//span[text()='My Account']")
+        self.my_account_drop_menu_xpath = (By.XPATH, "//a[@title='My Account']")
         self.login_option_link_text = (By.LINK_TEXT, "Login")
         self.register_option_link_text = (By.LINK_TEXT, "Register")
 
