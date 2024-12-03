@@ -8,6 +8,7 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
+from icecream import ic
 
 from utilities import ConfigReader
 
@@ -18,15 +19,15 @@ def get_config_value(section, key, env_var=None, default=None):
     if env_var:
         value = os.getenv(env_var, default)
         if value is not None:
-            print(f"Found value from environment variable: {value}")
+            ic(f"Found value from environment variable: {value}")
             return value  # Return the environment variable value if it exists
 
     # If the environment variable isn't set or not provided, check the configuration file
     value = ConfigReader.read_configuration(section, key)
     if value is not None:
-        print(f"Read value from config file: {value}")
+        ic(f"Read value from config file: {value}")
     else:
-        print(f"Using default value: {default}")
+        ic(f"Using default value: {default}")
     return value if value is not None else default  # Return from config file or default if not found
 
 
@@ -34,7 +35,7 @@ def setup_browser_options(browser, headless, maximized, fullscreen):
     """Returns the browser options based on the browser name."""
     options = None
 
-    print(f"Setting up options for {browser} browser")
+    ic(f"Setting up options for {browser} browser")
 
     if browser.lower() == "chrome":
         options = ChromeOptions()
@@ -60,29 +61,29 @@ def setup_browser_options(browser, headless, maximized, fullscreen):
 
     # Apply headless mode first
     if headless:
-        print("Running headless browser")
+        ic("Running headless browser")
         options.add_argument("--headless")
 
     # Apply window size arguments only if not headless
     if not headless:
         # if maximized and fullscreen:
-        #     print("Error: Both 'maximized' and 'fullscreen' cannot be enabled at the same time.")
+        #     ic("Error: Both 'maximized' and 'fullscreen' cannot be enabled at the same time.")
         #     raise ValueError("Both 'maximized' and 'fullscreen' cannot be enabled at the same time.")
         if maximized:
-            print("Maximizing browser window")
+            ic("Maximizing browser window")
             options.add_argument("--start-maximized")
         if fullscreen:
-            print("Starting browser in fullscreen mode")
+            ic("Starting browser in fullscreen mode")
             options.add_argument("--start-fullscreen")
 
     # Debug output for the options being applied
-    print(f"Options created: {options.arguments}")
+    ic(f"Options created: {options.arguments}")
     return options
 
 
 def initialize_webdriver(browser, options):
     """Initialize and return the WebDriver instance."""
-    print(f"Initializing {browser} WebDriver with options: {options.arguments}")
+    ic(f"Initializing {browser} WebDriver with options: {options.arguments}")
 
     if browser.lower() == "chrome":
         return webdriver.Chrome(service=ChromeService(), options=options)
@@ -97,7 +98,7 @@ def initialize_webdriver(browser, options):
 def before_scenario(context, driver):
     """Setup the WebDriver before running the scenario."""
     # Retrieve browser settings from environment or configuration file
-    browser = get_config_value("basic info", "browser", "browser", "edge")
+    browser = get_config_value("basic info", "browser", "browser")
     headless = get_config_value("basic info", "headless", "headless") == "true"
     maximized = get_config_value("basic info", "maximized", "maximized") == "true"
     fullscreen = get_config_value("basic info", "fullscreen", "fullscreen") == "true"
@@ -110,7 +111,7 @@ def before_scenario(context, driver):
     options = setup_browser_options(browser, headless, maximized, fullscreen)
 
     # Initialize the WebDriver with the options
-    print(f"Initializing WebDriver for {browser} browser with options: {options.arguments}")
+    ic(f"Initializing WebDriver for {browser} browser with options: {options.arguments}")
     context.driver = initialize_webdriver(browser, options)
 
     # Open the base URL

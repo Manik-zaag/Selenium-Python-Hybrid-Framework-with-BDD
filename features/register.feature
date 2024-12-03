@@ -1,7 +1,8 @@
 Feature: Register Account functionality
 
   Background:
-    Given I navigate to Register page
+    Given I got navigated to Home page
+    And I navigate to Register page
 
   @fullscreenshot
   Scenario: Register with mandatory fields

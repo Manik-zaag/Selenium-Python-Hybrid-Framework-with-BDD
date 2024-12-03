@@ -1,7 +1,8 @@
 Feature: Login Functionality
 
   Background:
-    Given I navigated to Login page
+    Given I got navigated to Home page
+    And I navigated to Login page
     
   Scenario Outline: Login with valid credentials
     When I enter valid email address as "<email>" and valid password as "<password>" into the fields
